@@ -1,4 +1,3 @@
-// src/pages/CreateEvent.jsx
 import { useNavigate } from "react-router-dom";
 import EventForm from "../components/EventForm";
 
