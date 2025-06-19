@@ -1,5 +1,6 @@
 // src/components/EventForm.jsx
 import { useState, useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
 
 function EventForm({ onAdd, initialData }) {
   const [form, setForm] = useState({
@@ -13,32 +14,45 @@ function EventForm({ onAdd, initialData }) {
     image: "",           
     price: "" 
   });
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (initialData) setForm(initialData);
   }, [initialData]);
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
+      setForm({
+          ...form,
+          [e.target.name]: e.target.value
+      })
+  }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!form.title || !form.date || !form.time)
       return alert("Title, Date, and Time are required");
-
-    onAdd({ ...form, id: initialData?.id || Date.now() });
-
-    setForm({
-      title: "",
-      description: "",
-      date: "",
-      time: "",
-      location: "",
-      type: "Seminar",
-      maxAttendees: "",
-    });
-  };
+        const method = initialData ? 'PUT' : 'POST';
+        const url = initialData ? `http://localhost:5000/api/events/${initialData._id}` : 'http://localhost:5000/api/events';
+        try {
+          const response = await fetch(url, {
+            method,
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(form),
+          });
+          if (response.status === 201 || response.status === 200) {
+            if (!initialData && onAdd) {
+              onAdd(form); 
+            }
+            navigate('/');
+          }
+        }
+        catch (error) {
+          console.error("Error submitting form:", error);
+          alert("Failed to submit form. Please try again.");
+        }
+      }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50 py-12 px-4 sm:px-6 lg:px-8">
@@ -131,10 +145,11 @@ function EventForm({ onAdd, initialData }) {
             </div>
 
             <label className="block text-sm font-medium text-gray-700 mb-2 text-left">
-                Image URL (Optional)
+                Image URL *
               </label>
               <input
                 name="image"
+                required
                 type="url"
                 value={form.image}
                 onChange={handleChange}
@@ -143,10 +158,11 @@ function EventForm({ onAdd, initialData }) {
               />
               
             <label className="block text-sm font-medium text-gray-700 mb-2 text-left">
-                Event Price (Optional)
+                Event Price *
               </label>
               <input
                 name="price"
+                required
                 type="number"
                 value={form.price}
                 onChange={handleChange}
@@ -174,11 +190,12 @@ function EventForm({ onAdd, initialData }) {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2 text-left">
-                  Max Attendees (Optional)
+                  Max Attendees *
                 </label>
                 <div className="relative">
                   <input
                     name="maxAttendees"
+                    required
                     type="number"
                     value={form.maxAttendees}
                     onChange={handleChange}

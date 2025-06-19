@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import Home from "./pages/Home";
 import CreateEvent from "./pages/CreateEvent";
 import EditEvent from "./components/EditEvent";
+import SearchEvents from "./pages/SearchEvents";
+import LoginPage from "./pages/LoginPage";
 import { Search,HomeIcon, Plus } from "lucide-react";
 
 function App() {
@@ -31,7 +33,7 @@ function App() {
                 <span>Create Event</span>
               </Link>
 
-              <Link to="/"
+              <Link to="/login"
                   className="flex items-center space-x-1 px-3 py-2 rounded-lg transition-all duration-200 text-white bg-yellow-300"
                 >
                   <span>Sign Up</span>
@@ -49,6 +51,8 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/create" element={<CreateEvent />} />
               <Route path="/edit/:id" element={<EditEvent />} />
+              <Route path="/search" element={<SearchEvents />} />
+              <Route path="/login" element={<LoginPage />} />
             </Routes>
           </div>
         </main>

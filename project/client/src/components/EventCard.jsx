@@ -41,13 +41,13 @@ function EventCard({ event, onDelete }) {
       </div>
         <div className="flex justify-between mt-2">
           <button
-            onClick={() => navigate(`/edit/${event.id}`)}
+            onClick={() => navigate(`/edit/${event._id}`)}
             className="bg-indigo-600 text-white px-4 py-1 rounded hover:bg-indigo-700"
           >
             Edit
           </button>
           <button
-            onClick={() => onDelete(event.id)}
+            onClick={() => onDelete(event._id)}
             className="bg-red-500 text-white px-4 py-1 rounded hover:bg-red-600"
           >
             Delete

@@ -1,34 +1,28 @@
-
-import { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import EventForm from "./EventForm";
+import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import EventForm from '../components/EventForm';
 
 function EditEvent() {
-  const { id } = useParams();
-  const navigate = useNavigate();
-  const [event, setEvent] = useState(null);
+    const { id } = useParams();
+    const [event, setEvent] = useState(null);
 
-  useEffect(() => {
-    const stored = JSON.parse(localStorage.getItem("events")) || [];
-    const found = stored.find((e) => e.id === parseInt(id));
-    if (!found) return navigate("/");
-    setEvent(found);
-  }, [id, navigate]);
+    useEffect(() => {
+        fetch(`http://localhost:5000/api/events/${id}`).then((res) => {
+            if(!res.ok) throw new Error("Failed to fetch event data");
+            return res.json();
+        }).then((data) => {
+            setEvent(data);
+        }).catch((error) => {
+            console.error("Error fetching event data:", error);
+            alert("Failed to fetch event data. Please try again.");
+        })
+    }, [id]);
 
-  const handleUpdate = (updatedEvent) => {
-    const stored = JSON.parse(localStorage.getItem("events")) || [];
-    const updatedList = stored.map((e) =>
-      e.id === parseInt(id) ? updatedEvent : e
-    );
-    localStorage.setItem("events", JSON.stringify(updatedList));
-    navigate("/");
-  };
-
-  return (
-    <div>
-      {event && <EventForm onAdd={handleUpdate} initialData={event} />}
-    </div>
-  );
+    return (
+        <div>
+            {event && <EventForm initialData={event} />}
+        </div>
+    )
 }
 
 export default EditEvent;
