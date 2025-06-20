@@ -7,7 +7,7 @@ function EditEvent() {
     const [event, setEvent] = useState(null);
 
     useEffect(() => {
-        fetch(`http://localhost:5000/api/events/${id}`).then((res) => {
+        fetch(`${import.meta.env.VITE_BACKEND_URL}/api/events/${id}`).then((res) => {
             if(!res.ok) throw new Error("Failed to fetch event data");
             return res.json();
         }).then((data) => {

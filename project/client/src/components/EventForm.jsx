@@ -32,7 +32,7 @@ function EventForm({ onAdd, initialData }) {
     if (!form.title || !form.date || !form.time)
       return alert("Title, Date, and Time are required");
         const method = initialData ? 'PUT' : 'POST';
-        const url = initialData ? `http://localhost:5000/api/events/${initialData._id}` : 'http://localhost:5000/api/events';
+        const url = initialData ? `${import.meta.env.VITE_BACKEND_URL}/api/events/${initialData._id}` : `${import.meta.env.VITE_BACKEND_URL}/api/events`;
         try {
           const response = await fetch(url, {
             method,
@@ -107,7 +107,6 @@ function EventForm({ onAdd, initialData }) {
                     required
                     value={form.date}
                     onChange={handleChange}
-                    min={new Date().toISOString().split('T')[0]}
                     className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg "
                   />
                 </div>

@@ -8,7 +8,7 @@ function SearchEvents() {
   const [filterType, setFilterType] = useState("All");
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/events")
+    fetch(`${import.meta.env.VITE_BACKEND_URL}/api/events`)
       .then((res) => res.json())
       .then((data) => {
         setAllEvents(data);
