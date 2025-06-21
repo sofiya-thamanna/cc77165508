@@ -1,7 +1,7 @@
 import express from 'express';
 import { body, validationResult } from 'express-validator';
 import jwt from 'jsonwebtoken';
-import User from '../model/User.js';
+import User from '../model/Users.js';
 import auth from '../middleware/auth.js';
 
 const router = express.Router();
@@ -71,7 +71,7 @@ router.post('/login', [
     if (!isMatch) {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
-
+    
     const token = jwt.sign(
       { userId: user._id },
       process.env.JWT_SECRET,
