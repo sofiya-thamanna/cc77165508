@@ -1,6 +1,8 @@
 import jwt from 'jsonwebtoken';
 import User from '../model/Users.js';
 
+app.options('*', cors());
+
 const auth = async (req, res, next) => {
   try {
     const token = req.header('Authorization')?.replace('Bearer ', '');
