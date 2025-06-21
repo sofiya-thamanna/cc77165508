@@ -3,20 +3,11 @@ const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const Event = require("./model/Event");
-const User = require("./model/Users")
-const bcrypt = require('bcryptjs');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-const allowedOrigins = ['https://cc77165508.vercel.app'];
-const authRouter = require('./routes/auth'); 
-app.use('/api/auth', authRouter);
-
-app.use(cors({
-  origin: true, 
-  credentials: true
-}));
+app.use(cors());
 app.use(express.json());
 
 mongoose
@@ -78,72 +69,6 @@ app.delete("/api/events/:id", async (req, res) => {
     res.status(500).json({ message: "Failed to delete event" });
   }
 });
-
-app.post("/api/auth/register", async (req, res) => {
-  const { name, email, password } = req.body;
-
-  if (!name || !email || !password) {
-    return res.status(400).json({ message: "All fields are required" });
-  }
-
-  try {
-    const existingUser = await User.findOne({ email });
-
-    if (existingUser) {
-      return res.status(409).json({ message: "Email already in use" });
-    }
-
-    const user = new User({ name, email, password }); // password will be hashed by the pre-save hook
-    await user.save();
-
-    res.status(201).json({ message: "User registered successfully" });
-  } catch (error) {
-    console.error("Registration error:", error);
-    res.status(500).json({ message: "Server error" });
-  }
-});
-
-aapp.post("/api/auth/login", async (req, res) => {
-  const { email, password } = req.body;
-
-  try {
-    const user = await User.findOne({ email });
-    
-    if (!user) {
-      return res.status(401).json({ message: "Invalid credentials" });
-    }
-
-    // Use bcrypt to compare hashed password
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.status(401).json({ message: "Invalid credentials" });
-    }
-
-    // Generate JWT token
-    const token = jwt.sign(
-      { userId: user._id },
-      process.env.JWT_SECRET,
-      { expiresIn: '7d' }
-    );
-
-    res.json({
-      token,
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email
-      }
-    });
-
-    console.log("Login attempt for:", email);
-    console.log("Found user:", user);
-    console.log("Password match:", isMatch);
-  } catch (error) {
-    console.error("Login error:", error);
-    res.status(500).json({ message: "Server error" });
-  }
-});
-
 
 app.use((req, res) => {
   res.status(404).json({ message: "Route not found" });

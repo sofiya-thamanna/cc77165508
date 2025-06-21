@@ -75,6 +75,7 @@ const Register = () => {
         {/* Header */}
         <div className="text-center">
           <div className="flex items-center justify-center space-x-2 mb-6">
+            <Calendar className="h-12 w-12 text-purple-600" />
             <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
               Planora
             </h1>
@@ -85,6 +86,7 @@ const Register = () => {
 
         {/* Register Form */}
         <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
+          {/* Error Messages */}
           {errors.length > 0 && (
             <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
               <ul className="text-sm text-red-600 space-y-1">
@@ -212,7 +214,13 @@ const Register = () => {
               disabled={loading}
               className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:from-purple-700 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
             >
-              {loading ? 'Creating account...' : 'Create Account'}
+              {loading ? (
+                <div className="flex items-center justify-center space-x-2">
+                  <span>Creating account...</span>
+                </div>
+              ) : (
+                'Create Account'
+              )}
             </button>
           </form>
 
