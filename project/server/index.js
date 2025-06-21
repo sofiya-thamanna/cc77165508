@@ -100,9 +100,7 @@ app.post("/api/auth/login", async (req, res) => {
 
   try {
     const user = await User.findOne({ email });
-    // console.log(user);
-    // console.log(user.password);
-    // console.log(password);
+    
     if (!user || user.password !== password) {
       return res.status(401).json({ message: "Invalid email or password" });
     }
