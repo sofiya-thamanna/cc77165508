@@ -1,6 +1,7 @@
 // src/components/EventForm.jsx
 import { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
+import { DatePicker,TimePicker  } from 'antd';
 
 function EventForm({ onAdd, initialData }) {
   const [form, setForm] = useState({
@@ -101,14 +102,15 @@ function EventForm({ onAdd, initialData }) {
                   Event Date *
                 </label>
                 <div className="relative">
-                  <input
+                  {/* <input
                     type="date"
                     name="date"
                     required
                     value={form.date}
                     onChange={handleChange}
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg "
-                  />
+                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg text-black "
+                  />        */}
+                  <DatePicker size="large" className="w-full !pl-10 !pr-4 !py-3 border border-gray-300 rounded-lg text-black" onChange={handleChange} />
                 </div>
               </div>
 
@@ -123,7 +125,8 @@ function EventForm({ onAdd, initialData }) {
                     required
                     value={form.time}
                     onChange={handleChange}
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg "
+                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg !active:border-black"
+                  
                   />
                 </div>
               </div>

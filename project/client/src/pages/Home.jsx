@@ -13,6 +13,7 @@ export default function Home() {
     fetch(`${import.meta.env.VITE_BACKEND_URL}/api/events`)
       .then((res) => res.json())
       .then((data) => {
+        console.log(data);
         const now = new Date();
         const withStatus = data.map(event => ({
           ...event,
