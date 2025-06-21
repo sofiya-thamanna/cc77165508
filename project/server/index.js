@@ -8,7 +8,7 @@ const User = require("./model/Users")
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-
+app.use(cors());
 app.use(express.json());
 
 mongoose
@@ -100,7 +100,7 @@ app.post("/api/auth/login", async (req, res) => {
 
   try {
     const user = await User.findOne({ email });
-    
+
     if (!user || user.password !== password) {
       return res.status(401).json({ message: "Invalid email or password" });
     }
