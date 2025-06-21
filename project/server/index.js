@@ -8,7 +8,13 @@ const User = require("./model/Users")
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-app.use(cors());
+const allowedOrigins = ['https://cc77165508.vercel.app'];
+
+app.use(cors({
+  origin: allowedOrigins,
+  credentials: true
+}));
+
 app.use(express.json());
 
 mongoose
