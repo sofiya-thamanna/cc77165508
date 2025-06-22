@@ -8,18 +8,55 @@ import LoginPage from "./pages/LoginPage";
 import Register from "./pages/Register";
 import { Search, HomeIcon, Plus, User, LogOut, LogIn } from "lucide-react";
 import { AuthProvider, useAuth } from "./context/AuthContext";
+import { useEffect, useRef, useState } from "react";
+
+function ProfileDropdown({ onLogout }) {
+  const { user } = useAuth();
+
+  if (!user) return null;
+
+  return (
+    <div className="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg z-50 border p-4">
+      <div className="mb-3">
+        <h2 className="text-lg font-semibold text-gray-800">{user.name}</h2>
+        <p className="text-sm text-gray-500">{user.email}</p>
+      </div>
+      <button
+        onClick={onLogout}
+        className="w-full px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition"
+      >
+        Logout
+      </button>
+    </div>
+  );
+}
 
 function AppContent() {
   const { user, logout } = useAuth();
+  const [showDropdown, setShowDropdown] = useState(false);
+  const dropdownRef = useRef();
 
+  const toggleDropdown = () => setShowDropdown(!showDropdown);
   const handleLogout = () => {
     logout();
+    setShowDropdown(false);
   };
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setShowDropdown(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   return (
     <div className="flex flex-col bg-gray-50">
       <nav className="bg-white shadow-lg border-b border-gray-100 sticky top-0 z-50 pr-8 pl-8">
-        <div className="mx-auto flex justify-between items-center px-6 py-4">
+        <div className="mx-auto flex justify-between items-center px-6 py-4 relative">
           {/* Logo */}
           <Link
             to="/"
@@ -56,16 +93,19 @@ function AppContent() {
 
             {user ? (
               <>
-                {/* Profile Link */}
-                <Link
-                  to="/profile"
-                  className="flex items-center space-x-1 px-3 py-2 rounded-lg transition-all duration-200 text-gray-600 hover:text-purple-600 hover:bg-purple-100"
-                >
-                  <User className="h-4 w-4" />
-                  <span>{user.name}</span>
-                </Link>
+                {/* Profile Button with Dropdown */}
+                <div className="relative" ref={dropdownRef}>
+                  <button
+                    onClick={toggleDropdown}
+                    className="flex items-center space-x-1 px-3 py-2 rounded-lg transition-all duration-200 text-gray-600 hover:text-purple-600 hover:bg-purple-100"
+                  >
+                    <User className="h-4 w-4" />
+                    <span>{user.name}</span>
+                  </button>
+                  {showDropdown && <ProfileDropdown onLogout={handleLogout} />}
+                </div>
 
-                {/* Logout */}
+                {/* Navbar Logout Button */}
                 <button
                   onClick={handleLogout}
                   className="flex items-center space-x-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors duration-200"
@@ -104,8 +144,6 @@ function AppContent() {
             <Route path="/search" element={<SearchEvents />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<Register />} />
-            {/* Optional: Add this later */}
-            {/* <Route path="/profile" element={<Profile />} /> */}
           </Routes>
         </div>
       </main>
