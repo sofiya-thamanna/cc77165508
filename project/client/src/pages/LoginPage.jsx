@@ -42,7 +42,6 @@ const LoginPage = () => {
         {/* Header */}
         <div className="text-center">
           <div className="flex items-center justify-center space-x-2 mb-6">
-            <Calendar className="h-12 w-12 text-purple-600" />
             <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
               Planora
             </h1>
