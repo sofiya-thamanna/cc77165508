@@ -138,15 +138,6 @@ const LoginPage = () => {
             </p>
           </div>
         </div>
-
-        {/* Demo Credentials */}
-        <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
-          <h3 className="text-sm font-medium text-blue-800 mb-2">Demo Credentials</h3>
-          <p className="text-xs text-blue-600">
-            Email: demo@planora.com<br />
-            Password: demo123
-          </p>
-        </div>
       </div>
     </div>
   );
